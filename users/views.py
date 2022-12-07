@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.views import LoginView, LogoutView
-from .forms import UserLoginForm
+from .forms import UserLoginForm, RegistrationForm
 
 import pyrebase as firebase
 
@@ -13,11 +13,14 @@ firebaseConfig = {
     "messagingSenderId": "212972838840",
     "appId": "1:212972838840:web:ff68185a3545e5628e394d",
     "measurementId": "G-WGEYCC1HFJ",
-    "databaseURL": "",
+    "databaseURL": "https://django-3aca5-default-rtdb.firebaseio.com",
+
 }
 
 app = firebase.initialize_app(firebaseConfig)
 authenticate_user = app.auth()
+user_db = app.database()
+
 
 # class UserLogin(LoginView):
 #     authentication_form = UserLoginForm
@@ -30,11 +33,17 @@ def login_view(request):
 
     if request.method == 'POST':
         form = UserLoginForm(request.POST)
+        username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
-
+        
         try:
             user = authenticate_user.sign_in_with_email_and_password(email, password)
+            
+            # data = {"name": "sarahj_KE"}
+            # verify_user = user_db.child("users").push(data, user["IdToken"])
+            # print(f'User: {user}')
+            
             if user is not None:
                 return redirect('homepage')
 
@@ -49,8 +58,26 @@ def login_view(request):
 
 
 def signup_view(request):
+    form = RegistrationForm()
 
-    return render(request, 'users/signup.html')
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+
+        if form.is_valid():
+            form_info = form.save(commit=False)
+            new_user = authenticate_user.create_user_with_email_and_password(form_info.email, form_info.password)
+            print('New User: ', new_user)
+            
+            uid = new_user["localId"]
+            data = {"name": form_info.username, "status": "1"}
+
+            user_db.child("users").child(uid).child("details").set(data)
+            
+            messages.success(request, "You have successfully created an account!")
+            return redirect('login')
+
+    context = {'signup_form': form}
+    return render(request, 'users/signup.html', context)
 
 def homepage_view(request):
 

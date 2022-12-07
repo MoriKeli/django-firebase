@@ -30,7 +30,7 @@ class UserLoginForm(forms.ModelForm):
 
     class Meta:
         model  =  CustomUser
-        fields =  ('email', 'password')
+        fields =  ('username', 'email', 'password')
         widgets = {
                    'email':forms.TextInput(attrs={'class':'form-control'}),
                    'password':forms.TextInput(attrs={'class':'form-control'}),
