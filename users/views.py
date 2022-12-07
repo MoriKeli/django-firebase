@@ -55,3 +55,7 @@ def signup_view(request):
 def homepage_view(request):
 
     return render(request, 'users/homepage.html')
+
+
+class LogoutUser(LogoutView):
+    template_name = 'users/logout.html'
