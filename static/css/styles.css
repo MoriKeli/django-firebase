@@ -1,0 +1,21 @@
+* {box-sizing: border-box;}
+html, body {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: "Nunito", sans-serif;
+    font-size: 25px;
+}
+.navbar {
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.75);
+}
+.navbar .navbar-brand {
+    margin-left: 4%;
+    font-size: 28px;
+    font-family: "Open Sans", sans-serif;
+}
+.body-container {
+    margin-top: 6%;
+    margin-bottom: 5%;
+}
