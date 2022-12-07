@@ -11,10 +11,29 @@ body {
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.75);
 }
 .navbar .navbar-brand {
+    margin: 0 4% 0 4%;
     margin-left: 4%;
     font-size: 28px;
     font-family: "Open Sans", sans-serif;
 }
+/* .site-header .container .navbar-brand {
+    margin-left: 12%;
+    margin-right: 3%;
+} */
+.navbar .container .navbar-nav a {
+    margin-right: 7px;
+    color: #ddd;
+}
+.navbar .container .navbar-nav .nav-link:hover {
+    color: #ffffff;
+}
+.navbar .container .navbar-nav .nav-link.active {
+    font-weight: 500;
+}
+.navbar .container .account-links {
+    margin-left: 37%;
+}
+
 .body-container {
     margin-top: 6%;
     margin-bottom: 5%;
