@@ -1,0 +1,82 @@
+{% extends 'app/base.html' %}{% block title %}Homepage{% endblock %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    {% block content %}
+    <div class="container body-container">
+        {% for product in products %}
+        <div class="modal fade" id="view-{{product.id}}" tabindex="-1">
+            <div class="modal-dialog modal-dialog-start">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">QR code for {{product.name}}</h5>
+                        <button type="button" class="btn-sm btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <fieldset class="form-group text-center">
+                            <img class="img-fluid" src="{{product.qr_code.url}}" alt="barcode-img">
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card card-body mb-3">
+                    <h5>Products table</h5>
+                    <hr>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-condensed table-hover table-striped">
+                            <thead>
+                                <tr class="table-dark text-center">
+                                    <th>#</th>
+                                    <th>Product</th>
+                                    <th>QR Code</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for product in products %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{product.name}}</td>
+                                    <td>
+                                        <a href="{{product.qr_code.url}}" data-bs-toggle="modal" data-bs-target="#view-{{product.id}}">{{product.qr_code.url}}</a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="3" class="text-center text-muted fw-bold">No products available</td></tr>
+                                {% endfor %}
+                            </tbody>
+                    
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <form action="" method="post" class="card card-body">
+                    {% csrf_token %}
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-4 text-center">Add new product</legend>
+                        {% include 'messages.html' %}
+                        {{form|crispy}}
+                    </fieldset>
+                    <div class="form-group text-end">
+                        <hr>
+                        <button type="submit" class="btn btn-outline-dark"><i class="bi-plus-circle-fill"></i> New product</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+</html>
