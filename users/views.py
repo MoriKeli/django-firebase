@@ -23,7 +23,7 @@ authenticate_user = app.auth()
 #     authentication_form = UserLoginForm
 #     template_name = 'users/login.html'
 
-def  login_view(request):
+def login_view(request):
     form = UserLoginForm()
     if request.user.is_authenticated:
         return redirect('homepage')
@@ -31,16 +31,18 @@ def  login_view(request):
     if request.method == 'POST':
         form = UserLoginForm(request.POST)
         email = request.POST.get('email')
-        password = request.POST.get('email')
+        password = request.POST.get('password')
 
         try:
-            user = authenticate_user.sign_in_with_email_and_password(email=email, password=password)
+            user = authenticate_user.sign_in_with_email_and_password(email, password)
+            if user is not None:
+                return redirect('homepage')
 
         except:
             messages.error(request, 'INVALID CREDENTIALS! Username and password may be case-sensitive.')
             return redirect('login')
 
-
+        print(f'User: {user}')
     context = {'form': form}
     return render(request, "users/login.html", context)
 
@@ -52,4 +54,4 @@ def signup_view(request):
 
 def homepage_view(request):
 
-    return render(request, 'user/homepage.html')
+    return render(request, 'users/homepage.html')
